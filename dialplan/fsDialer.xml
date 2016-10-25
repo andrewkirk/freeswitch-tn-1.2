@@ -1,0 +1,49 @@
+<include>
+  <context name="fsDialer">
+
+<extension name="play_and_get_digits with say">
+  <condition field="destination_number" expression="^1202858658[0-9]$">
+  	   <action application="set" data="accountcode=DTMFCOLLECT"/>
+           <action application="ring_ready"/>
+           <action application="answer"/>
+           <action application="log" data="ERR *** DTMF Collect - fm:${sip_from_user} to:${sip_to_user} Collecting Digits .... ***"/>
+           <action application="play_and_get_digits" data="2 18 3 2000 * /etc/freeswitch/scripts/prompts/dtmf_collection_calling.wav $${base_dir}/sounds/en/us/callie/ivr/8000/ivr-invalid_number_format.wav dtmfcollect \d+"/>
+           <action application="log" data="ERR *** DTMF Collect - fm:${sip_from_user} to:${sip_to_user} DIGITS: ${dtmfcollect} callid: ${sip_call_id} ***"/>
+           <action application="set" data="instant_ringback=true"/>
+           <action application="set" data="transfer_ringback=$${us-ring}"/>
+           <action application="lua" data="/etc/freeswitch/scripts/onInboundCall.lua"/>
+           <action application="set" data="ignore_early_media=true"/>
+           <action application="set" data="hangup_after_bridge=true"/>
+           <action application="set" data="continue_on_fail=true"/>
+           <action application="export" data="sip_invite_params=user=phone"/>
+           <action application="set" data="effective_caller_id_name=${fsd_caller_id}"/>
+           <action application="bridge" data="${obString}"/>
+
+  </condition>
+ </extension>
+
+
+    <extension name="fsDialer_get_all_calls_with_vm">
+        <condition field="destination_number" expression="(.*)">
+            <action application="unset" data="sip_h_P-RTP-Proxy"/>  <!-- delete this header -->
+            <action application="set" data="zrtp_secure_media=false"/>
+            <action application="set" data="accountcode=fsDialer"/>  <!-- set for CDR -->
+            <action application="ring_ready"/>  <!-- starts early media -->
+            <action application="log" data="ERR ****** START of fsDialer.xml with Voicemail  *******"/>
+            <action application="lua" data="/etc/freeswitch/scripts/onInboundCall.lua"/>
+            <action application="set" data="ignore_early_media=true"/>
+            <action application="set" data="hangup_after_bridge=true"/>  <!-- if Leg B is answered, do not do VM below -->
+            <!-- set conditions that will fall do the VM condition below -->
+            <action application="set" data="continue_on_fail=true"/>
+            <!-- action application="info" -->  
+            <!-- debug stuff - delete for production -->
+            <action application="set" data="effective_caller_id_name=${fsd_caller_id}"/>
+            <action application="bridge" data="${obString}"/>
+            <!-- IF Leg B not answered AND rejected with a continue_on_fail condition do VM below -->
+            <action application="lua" data="/etc/freeswitch/scripts/onVoicemail.lua"/>
+        </condition>
+    </extension>
+
+  </context>
+</include>
+

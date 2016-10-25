@@ -1,0 +1,23 @@
+-- ==========================================================
+-- SipStorm Global Variables 
+-- ==========================================================
+
+customerBaseDirectory = "/etc/freeswitch/scripts/customerData/andrew2asterisk/"
+
+defaultCallTimeOut = 600;    -- 600 seconds 
+answerTimeout = 60;    -- 45 seconds 
+clientTryIterations = 1;
+clientTimeBetweenTryIterations=5000;
+defaultPrepaidTimerSeconds=60;   -- 60 seconds
+
+baseOnInboundCallURL = "http://50.23.224.98/andrew2asterisk/onInboundCall";
+baseOnAnswerURL = "http://50.23.224.98/andrew2asterisk/onAnswer";
+basePrepaidTimerURL = "http://50.23.224.98/andrew2asterisk/onPrepaidTimer";
+baseOnCallEndURL = "http://50.23.224.98/andrew2asterisk/onCallEnd";
+
+toFromHeaderUserPart = 0;   -- 1 means full SIP header, 0 means just userpart
+
+defaultProblemIvrAudioFile = customerBaseDirectory .. "goodbye.wav";
+callNotAllowedPrompt = customerBaseDirectory .. "rejected.wav";
+defaultVmPrompt = customerBaseDirectory .. "greeting.wav";
+

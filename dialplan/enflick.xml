@@ -1,0 +1,26 @@
+<!-- http://wiki.freeswitch.org/wiki/Dialplan_XML -->
+<include>
+  <context name="enflick">
+
+    <!-- In call Transfer for phones without a transfer button -->
+    <extension name="start_conf">
+      <condition field="destination_number" expression="^conf_(.*)$">
+	    <action application="set" data="hangup_after_bridge=false"/>
+	    <action application="set" data="fsd_in_conf=1"/>
+	    <action application="set" data="fsd_conf_uuid=$1"/>
+	    <action application="set" data="api_hangup_hook=lua /etc/freeswitch/scripts/onCallEnd.lua"/>
+	    <action application="conference" data="conf$1@enflick"/>
+      </condition>
+    </extension>
+
+
+    <!-- Used to transfer both legs into a conference -->
+    <extension name="cf">
+      <condition field="destination_number" expression="^cf$">
+	<action application="answer"/>
+	<action application="transfer" data="-both 30${dialed_extension:2} XML default"/>
+      </condition>
+    </extension>
+
+  </context>
+</include>
