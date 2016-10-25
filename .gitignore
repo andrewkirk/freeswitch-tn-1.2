@@ -1,0 +1,13 @@
+chatplan/
+mrcp_profiles/
+htdocs/      
+tls/
+ivr_menus/ 
+directory/
+jingle_profiles/
+extensions.conf
+lang/
+freeswitch.serial
+mime.types
+skinny_profiles/       
+yaml
