@@ -34,6 +34,8 @@
     <!-- This could be set to "passive" -->
     <param name="local-network-acl" value="localnet.auto"/>
     <param name="manage-presence" value="false"/>
+    <param name="inbound-late-negotiation" value="true"/>
+    <param name="renegotiate-codec-on-reinvite" value="true"/>
 
     <!--<param name="aggressive-nat-detection" value="true"/>-->
     <param name="inbound-codec-negotiation" value="generous"/>
